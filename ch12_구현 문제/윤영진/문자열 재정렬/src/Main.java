@@ -26,7 +26,6 @@ public class Main {
             }
         });
 
-
         String result = "";
         for (int i = 0; i < characters.size(); i++) {
             result += characters.get(i);
