@@ -8,7 +8,7 @@ public class Solution {
             int[][] paddedKey = pad(key, paddingSize);
             for (int j = 0; j < paddedKey.length - paddingSize; j++) {
                 for (int k = 0; k < paddedKey.length - paddingSize; k++) {
-                    if (isValid(lock, paddedKey, j, k)) {
+                    if (check(lock, paddedKey, j, k)) {
                         return true;
                     }
                 }
@@ -18,7 +18,7 @@ public class Solution {
         return false;
     }
 
-    private boolean isValid(int[][] lock, int[][] paddedKey, int j, int k) {
+    private boolean check(int[][] lock, int[][] paddedKey, int j, int k) {
         for (int l = 0; l < lock.length; l++) {
             for (int m = 0; m < lock.length; m++) {
                 if (lock[l][m] + paddedKey[j + l][k + m] != 1) {
@@ -50,13 +50,13 @@ public class Solution {
      */
 
     private int[][] rotate(int[][] key) {
-        int[][] new_key = new int[key.length][key.length];
+        int[][] rotatedKey = new int[key.length][key.length];
         for (int i = 0; i < key.length; i++) {
             for (int j = 0; j < key.length; j++) {
-                new_key[i][j] = key[key.length - 1 - j][i];
+                rotatedKey[i][j] = key[key.length - 1 - j][i];
             }
         }
-        return new_key;
+        return rotatedKey;
     }
 
     private int[][] pad(int[][] key, int padSize) {
