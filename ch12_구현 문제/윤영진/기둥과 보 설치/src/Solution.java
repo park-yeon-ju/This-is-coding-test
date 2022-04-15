@@ -1,21 +1,21 @@
-import java.io.IOException;
 
-public class Main {
+
+public class Solution {
 
     static boolean[][] pillar; // 기둥
     static boolean[][] bar; // 보
 
-    public static int[][] solution(int n, int[][] build_frame) {
+    private int[][] solution(int n, int[][] build_frame) {
 
         pillar = new boolean[n + 1][n + 1];
         bar = new boolean[n + 1][n + 1];
         int count = 0;
 
-        for (int[] build : build_frame) {
-            int x = build[0];
-            int y = build[1];
-            int a = build[2];
-            int b = build[3];
+        for (int[] frame : build_frame) {
+            int x = frame[0]; // x 좌표
+            int y = frame[1]; // y 좌표
+            int a = frame[2]; // 기둥(0) or 보(1)
+            int b = frame[3]; // 삭제(0) or 설치(1)
 
             // 기둥
             if (a == 0) {
@@ -25,8 +25,9 @@ public class Main {
                         pillar[x][y] = true;
                         count++;
                     }
-                    // 삭제
-                } else {
+                }
+                // 삭제
+                else {
                     pillar[x][y] = false;
                     if (canDelete(x, y) == false) {
                         pillar[x][y] = true;
@@ -38,27 +39,22 @@ public class Main {
             // 보
             else {
                 if (b == 1) {
-
-                    if (x == 1 && y == 1) {
-                    }
                     if (checkBar(x, y)) {
                         bar[x][y] = true;
                         count++;
                     }
-                    // 삭제
-                } else {
+                }
+                // 삭제
+                else {
                     bar[x][y] = false;
                     if (canDelete(x, y) == false) {
                         bar[x][y] = true;
-
                     } else {
                         count--;
-
                     }
                 }
             }
         }
-
 
         int[][] answer = new int[count][3];
 
@@ -66,74 +62,60 @@ public class Main {
 
         for (int i = 0; i < n + 1; i++) {
             for (int j = 0; j < n + 1; j++) {
-                if (pillar[i][j]) {
+
+                if(pillar[i][j]) {
                     answer[count][0] = i;
                     answer[count][1] = j;
                     answer[count++][2] = 0;
                 }
-                if (bar[i][j]) {
+                if(bar[i][j]) {
                     answer[count][0] = i;
                     answer[count][1] = j;
                     answer[count++][2] = 1;
                 }
             }
         }
+
         return answer;
+
     }
 
-    private static boolean canDelete(int x, int y) {
-
+    private boolean canDelete(int x, int y) {
         for (int i = Math.max(0, x - 1); i <= x + 1; i++) {
-            for (int j = 0; j <= y + 1; j++) {
-                if (pillar[i][j] && checkPillar(i, j) == false) {
+            for (int j = y; j <= y + 1; j++) {
+
+                /**
+                 * 하나를 지우고 canDelete함수를 호출했음
+                 * 하나를 지우고 나서 check함수를 호출했을 때 문제가 생기면 지우지 못하는 경우임
+                 */
+                if (pillar[i][j] && checkPillar(i, j) == false)
                     return false;
-                }
-                if (bar[i][j] && checkBar(i, j) == false) {
+
+                if (bar[i][j] && checkBar(i, j) == false)
                     return false;
-                }
+
             }
         }
         return true;
-    }
 
-    private static boolean checkPillar(int x, int y) {
-
-        if (y == 0 || (x > 0 && bar[x - 1][y]) || pillar[x][y - 1] || bar[x][y])
-            return true;
-
-        return false;
 
     }
 
-    private static boolean checkBar(int x, int y) {
-
-        if (pillar[x][y - 1] || pillar[x + 1][y - 1])
-            return true;
+    private boolean checkBar(int x, int y) {
 
         if (x > 0 && bar[x - 1][y] && bar[x + 1][y])
             return true;
+        if (pillar[x][y - 1] || pillar[x + 1][y - 1])
+            return true;
 
         return false;
     }
 
-    public static void main(String[] args) throws IOException {
+    private boolean checkPillar(int x, int y) {
 
-//        [[0,0,0,1],[2,0,0,1],[4,0,0,1],[0,1,1,1],[1,1,1,1],[2,1,1,1],[3,1,1,1],[2,0,0,0],[1,1,1,0],[2,2,0,1]]
-        int[][] build_frame
-                = {{0, 0, 0, 1}, {2, 0, 0, 1}, {4, 0, 0, 1}, {0, 1, 1, 1}, {1, 1, 1, 1},
-                {2, 1, 1, 1}, {3, 1, 1, 1}, {2, 0, 0, 0}, {1, 1, 1, 0}, {2, 2, 0, 1}};
-
-//                = {
-//                {1, 0, 0, 1}, {1, 1, 1, 1}, {2, 1, 0, 1}, {2, 2, 1, 1},
-//                {5, 0, 0, 1}, {5, 1, 0, 1}, {4, 2, 1, 1}, {3, 2, 1, 1}};
-        int[][] solution = solution(5, build_frame);
-
-
-        for (int[] ints : solution) {
-            System.out.print(ints[0] + " " + ints[1] + " " + ints[2]);
-            System.out.println();
-        }
-
-
+        if (y == 0 || pillar[x][y - 1] || bar[x][y] || bar[x - 1][y])
+            return true;
+        return false;
     }
+
 }
