@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+
 public class Main {
 
     static int N;
     static int M;
+
+    static List<Point> house = new ArrayList<>();
+    static List<Point> chicken = new ArrayList<>();
 
     public static class Point {
         int x;
@@ -21,24 +25,22 @@ public class Main {
     }
 
     public static class Combination {
-
         int n;
         int r;
         int[] now;
-        public List<List<Point>> result;
-
-        public List<List<Point>> getResult() {
-            return result;
-        }
+        List<List<Point>> result = new ArrayList<>();
 
         public Combination(int n, int r) {
             this.n = n;
             this.r = r;
             now = new int[r];
-            result = new ArrayList<>();
         }
-        
-        public void combination(List<Point> chicken, int depth, int idx, int target) {
+
+        public List<List<Point>> getResult() {
+            return result;
+        }
+
+        public void combination(int depth, int idx, int target){
 
             if (depth == r) {
                 List<Point> tmp = new ArrayList<>();
@@ -50,69 +52,59 @@ public class Main {
             }
             if(target == n) return;
             now[idx] = target;
-            combination(chicken, depth + 1, idx + 1, target + 1);
-            combination(chicken, depth, idx, target + 1);
 
+            combination(depth + 1, idx + 1, target + 1);
+            combination(depth, idx, target + 1);
         }
     }
-
-    private static int getSum(List<Point> house, List<Point> candidates) {
-
-        int result = 0;
-        // 모든 집에 대하여
-        for (int i = 0; i < house.size(); i++) {
-            int hx = house.get(i).x;
-            int hy = house.get(i).y;
-            // 가장 가까운 치킨 집을 찾기
-            int temp = Integer.MAX_VALUE;
-            for (int j = 0; j < candidates.size(); j++) {
-                int cx = candidates.get(j).x;
-                int cy = candidates.get(j).y;
-                temp = Math.min(temp, Math.abs(hx - cx) + Math.abs(hy - cy));
-            }
-            // 가장 가까운 치킨 집까지의 거리를 더하기
-            result += temp;
-        }
-        // 치킨 거리의 합 반환
-        return result;
-
-    }
-
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
+
         st = new StringTokenizer(br.readLine());
+
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        List<Point> house = new ArrayList<>();
-        List<Point> chicken = new ArrayList<>();
 
-        for (int x = 0; x < N; x++) {
-            st = new StringTokenizer(br.readLine()); // 0 0 1 0 0
-            for (int y = 0; y < N; y++) {
-                int type = Integer.parseInt(st.nextToken());
-                if (type == 1) {
-                    house.add(new Point(x, y));
-                }
-                if (type == 2) {
-                    chicken.add(new Point(x, y));
-                }
+
+        for (int i = 1; i <= N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 1; j <= N; j++) {
+                String tmp = st.nextToken();
+                if (tmp.equals("1")) house.add(new Point(i, j));
+                if(tmp.equals("2")) chicken.add(new Point(i, j));
             }
         }
 
-        Combination comb = new Combination(N, M);
-        comb.combination(chicken, 0, 0, 0);
+        // nCm, n = chicken.size()
+        Combination comb = new Combination(chicken.size(), M);
+        comb.combination( 0, 0, 0);
+
         List<List<Point>> result = comb.getResult();
 
         int answer = Integer.MAX_VALUE;
         for (int i = 0; i < result.size(); i++) {
-            answer = Math.min(answer, getSum(house,result.get(i)));
+            answer = Math.min(answer, getSum(result.get(i)));
         }
-        System.out.println(answer);
 
+        System.out.println(answer);
     }
 
+    private static int getSum(List<Point> candidates) {
+
+        int answer = 0;
+        for (Point h : house) {
+
+            int tmp = Integer.MAX_VALUE;
+            for (Point c : candidates) {
+                tmp = Math.min(tmp, Math.abs(h.x - c.x) + Math.abs(h.y - c.y));
+            }
+            answer += tmp;
+        }
+
+        return answer;
+    }
 
 
 }
