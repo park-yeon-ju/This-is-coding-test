@@ -68,6 +68,9 @@ public class Main {
         M = Integer.parseInt(st.nextToken());
 
 
+        /**
+         * 일반 집과 치킨 집을 나눠서 리스트에 저장
+         */
         for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 1; j <= N; j++) {
@@ -80,10 +83,14 @@ public class Main {
         // nCm, n = chicken.size()
         Combination comb = new Combination(chicken.size(), M);
         comb.combination( 0, 0, 0);
-
         List<List<Point>> result = comb.getResult();
 
         int answer = Integer.MAX_VALUE;
+
+        /**
+         * 모든 조합 경우의 수만큼 반복하며 각 집마다 후보 치킨 집중 하나를 선택
+         * 각 조합 중에 가장 최적의 조합을 선택
+         */
         for (int i = 0; i < result.size(); i++) {
             answer = Math.min(answer, getSum(result.get(i)));
         }

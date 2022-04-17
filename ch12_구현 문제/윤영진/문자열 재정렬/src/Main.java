@@ -21,9 +21,9 @@ public class Main {
             }
         }
         Collections.sort(characters);
-        for (Character c : characters) {
-            System.out.print(c);
-        }
+
+        characters.stream().forEach(System.out::print);
+
         System.out.print(sum != 0 ? sum : "");
     }
 }
