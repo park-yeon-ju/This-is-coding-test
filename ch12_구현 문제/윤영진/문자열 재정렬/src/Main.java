@@ -12,14 +12,18 @@ public class Main {
         List<Character> characters = new ArrayList<>();
 
         int sum = 0;
+
         for (int i = 0; i < s.length(); i++) {
+
             char temp = s.charAt(i);
+
             if (temp < 65) {
                 sum += Integer.parseInt(String.valueOf(temp));
             }else {
                 characters.add(temp);
             }
         }
+
         Collections.sort(characters);
 
         characters.stream().forEach(System.out::print);
