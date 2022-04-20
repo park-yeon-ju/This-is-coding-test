@@ -103,6 +103,11 @@ public class Solution {
 
     private boolean checkBar(int x, int y) {
 
+        /**
+         * 보 설치 조건
+         * 한쪽 끝부분이 기둥 위에 있거나(= pillar[x][y - 1] || pillar[x + 1][y - 1])
+         * 양쪽 끝부분이 다른 보와 동시에 연결되어 있어야 합니다. (= x > 0 && bar[x - 1][y] && bar[x + 1][y])
+         */
         if (x > 0 && bar[x - 1][y] && bar[x + 1][y])
             return true;
         if (pillar[x][y - 1] || pillar[x + 1][y - 1])
@@ -113,6 +118,12 @@ public class Solution {
 
     private boolean checkPillar(int x, int y) {
 
+        /**
+         * 기둥 설치 조건
+         * 바닥 위에 있거나 (= y == 0)
+         * 보의 한쪽 끝부분 위에 있거나 (= bar[x][y] || bar[x - 1][y])
+         * 또는 다른 기둥 위에 있어야 합니다. (= pillar[x][y - 1])
+         */
         if (y == 0 || pillar[x][y - 1] || bar[x][y] || bar[x - 1][y])
             return true;
         return false;
