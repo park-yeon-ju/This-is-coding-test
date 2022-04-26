@@ -59,9 +59,9 @@ public class Main {
         }
 
         Collections.sort(students);
+
         for (Student student : students) {
             System.out.println(student.name);
-
         }
 
 

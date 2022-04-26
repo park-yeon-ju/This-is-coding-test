@@ -61,6 +61,7 @@ public class Main {
                 return -1;
             }
         });
+
         int[] answer = new int[N];
 
         for (int i = 0; i < results.size(); i++) {
